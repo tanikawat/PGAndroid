@@ -17,4 +17,5 @@
 #Steps
  - Sincronizar com a Web as tabelas tbl_user e tbl_produtos
  - Permitir login
- - Armazenar posições e ir enviando de tempo em tempo
+ - Armazenar posições e ir enviando de tempo em tempo.
+
