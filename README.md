@@ -6,13 +6,14 @@
 
 
 #Database
-- tbl_user: Nome, Login, Senha
-- tbl_produto: id_user,tipo, nome, valor
-- tbl_gps: id_user,hora, lat, long, enviado(true, false)
-- tbl_chat: id_user,de, para, message, lat, lng
-- tbl_ponto: id_user, hora, situacao, lat, lng
-- tbl_logs: id_user, msg, hora, lat, lng
-- tbl_suport: id_user, msg, hora, lat, lng, situacao
+- tbl_user: id, nome, Login, Senha
+- tbl_produto: id,id_user,tipo, nome, valor
+- tbl_gps: id,id_user,data, lat, long, enviado(true, false)
+- tbl_chat: id,id_user,de, para, message, lat, lng
+- tbl_ponto: id,id_user, data, situacao, lat, lng
+- tbl_logs: id,id_user, msg, data, lat, lng
+- tbl_suport: id,id_user, msg, data, lat, lng, situacao
+- tbl_pedido: id,id_user, id_produto, quantidade, situacao, lat, lng, data
 
 #Steps
  - Sincronizar com a Web as tabelas tbl_user e tbl_produtos
