@@ -15,27 +15,27 @@
 		
 		tx.executeSql('DROP TABLE IF EXISTS gps');
         tx.executeSql('CREATE TABLE IF NOT EXISTS gps (idGps INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, lat float, long float, enviado boolean)');
-		tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado) VALUES ("1","-23.000","-46.000",1)');
+		tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado) VALUES ("1",-23.000,-46.000,1)');
 		
 		tx.executeSql('DROP TABLE IF EXISTS chat');
         tx.executeSql('CREATE TABLE IF NOT EXISTS chat (idChat INTEGER PRIMARY KEY AUTOINCREMENT, idUser int,de Text not null, para Text not null, message TEXT, lat float, long float)');
-		tx.executeSql('INSERT INTO chat(idUser,de,para,message,lat,long) VALUES ("1","Tulio Tanikawa","Aecio Roussef da Silva","Quero money","-23.000","-46.000")');
+		tx.executeSql('INSERT INTO chat(idUser,de,para,message,lat,long) VALUES ("1","Tulio Tanikawa","Aecio Roussef da Silva","Quero money",-23.000,-46.000)');
 		
         tx.executeSql('DROP TABLE IF EXISTS ponto');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ponto (idPonto INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, situacao TEXT, lat float, long float)');
-		tx.executeSql('INSERT INTO ponto(idUser,situacao,lat,long) VALUES ("1","situacao precaria","-23.000","-46.000")');
+		tx.executeSql('INSERT INTO ponto(idUser,situacao,lat,long) VALUES ("1","situacao precaria",-23.000,-46.000)');
 		
 		tx.executeSql('DROP TABLE IF EXISTS log');
         tx.executeSql('CREATE TABLE IF NOT EXISTS log (idLog INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, message TEXT, data datetime, lat float, long float)');
-		tx.executeSql('INSERT INTO log(idUser,message,lat,long) VALUES ("1","Deu problema pra caramba na Base","-23.000","-46.000")');
+		tx.executeSql('INSERT INTO log(idUser,message,lat,long) VALUES ("1","Deu problema pra caramba na Base",-23.000,-46.000)');
 		
 		tx.executeSql('DROP TABLE IF EXISTS support');
         tx.executeSql('CREATE TABLE IF NOT EXISTS support (idSupport INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, message TEXT NOT NULL,data datetime, lat float, long float, situacao TEXT NOT NULL)');
-		tx.executeSql('INSERT INTO support(idUser,message,lat,long,situacao) VALUES ("1","Suporte, me traga um copo dagua","-23.000","-46.000","Situacao de ter sede")');
+		tx.executeSql('INSERT INTO support(idUser,message,lat,long,situacao) VALUES ("1","Suporte, me traga um copo dagua",-23.000,-46.000,"Situacao de ter sede")');
 		
 		tx.executeSql('DROP TABLE IF EXISTS pedido');
         tx.executeSql('CREATE TABLE IF NOT EXISTS pedido (idPedido INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, idProduto int, quantidade int, situacao TEXT, lat float, long float, data datetime)');
-		tx.executeSql('INSERT INTO pedido(idUser,idProduto,quantidade,situacao,lat,long) VALUES ("1","1","666","Processado","-23.000","-46.000")');
+		tx.executeSql('INSERT INTO pedido(idUser,idProduto,quantidade,situacao,lat,long) VALUES ("1","1","666","Processado",-23.000,-46.000)');
     }
 	
 	
@@ -87,4 +87,4 @@
 		}
 		
 		
-	}
+	

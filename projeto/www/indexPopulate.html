@@ -2,8 +2,8 @@
 <head>
 <link rel="stylesheet" href="/css/custom.min.css">
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
- <script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="utf-8" src="index.js"></script>
+<script type="text/javascript" charset="utf-8">
 
     // Wait for PhoneGap to load
     //
@@ -78,7 +78,7 @@
 
     // PhoneGap is ready
     //
-    function onDeviceReady() {
+    function startSeed() {
         var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
         db.transaction(populateDB, errorCB, successCB);
     }
