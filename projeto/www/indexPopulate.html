@@ -1,5 +1,6 @@
 <html>
 <head>
+<link rel="stylesheet" href="/css/custom.min.css">
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
  <script type="text/javascript" charset="utf-8">
@@ -29,8 +30,8 @@
         tx.executeSql('CREATE TABLE IF NOT EXISTS chat (idChat INTEGER PRIMARY KEY AUTOINCREMENT, idUser int,de Text not null, para Text not null, message TEXT, lat TEXT not null, long TEXT not null)');
 		tx.executeSql('INSERT INTO chat(idUser,de,para,message,lat,long) VALUES ("1","Tulio Tanikawa","Aecio Roussef da Silva","Quero money","-23.000","-46.000")');
 		
-		tx.executeSql('DROP TABLE IF EXISTS ponto');
         tx.executeSql('CREATE TABLE IF NOT EXISTS ponto (idPonto INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, situacao TEXT, lat TEXT, long TEXT)');
+		tx.executeSql('DROP TABLE IF EXISTS ponto');
 		tx.executeSql('INSERT INTO ponto(idUser,situacao,lat,long) VALUES ("1","situacao precaria","-23.000","-46.000")');
 		
 		tx.executeSql('DROP TABLE IF EXISTS log');

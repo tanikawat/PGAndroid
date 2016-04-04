@@ -1,67 +1,88 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
   <head>
-    <title>Device Properties Example</title>
-
+    <title>Grampo de Localização</title>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" charset="utf-8">
-
-    // Wait for PhoneGap to load
-    //
+    
     document.addEventListener("deviceready", onDeviceReady, false);
-
     var watchID = null;
 
-    // PhoneGap is ready
-    //
     function onDeviceReady() {
-        // Update every 3 seconds
-        var options = { frequency: 3000 };
-        watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+        // Throw an error if no update is received every 30 seconds
+        var options = { timeout: 30000 };
+		//abro o banco, como quero testar, crio um populate de lat long só pq eu sempre dropo tudo quando inicio o app por motivo de debug
 		var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+		db.transaction(populateDB, errorCB, successCB);
+        watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+    }
+	
+	 function errorCB(err) {
+        alert("Error processing SQL: "+err.code);
     }
 
-    // onSuccess Geolocation
-    //
+    function successCB() {
+       //alert("Sucesso");
+    }
+
+	//Callback do geolocation watchID
     function onSuccess(position) {
+		//Printa na pagina só pra ver que ta rodando
         var element = document.getElementById('geolocation');
         element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
                             'Longitude: ' + position.coords.longitude     + '<br />' +
                             '<hr />'      + element.innerHTML;
 		
-        db.transaction(queryDB, errorCB, successCB);
+		var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+		//alert(position.coords.latitude );
+		//Relembrando formatação de data pra checar qual é compativel com datetime do sqlite
+		var date = new Date();
+		var year = date.getFullYear();
+		var day = date.getDay();
+		var month = date.getMonth();
+		var hour = date.getHours();
+		var min = date.getMinutes();
+		var seconds = date.getSeconds();
+		var dataTeste= year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds;
+		//alert("data inteira= "+date+" separada : "+year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds);
 		
+		//'2007-01-01 10:00:00' < formato no banco
+		//Inserta no banco
+	    db.transaction(function(tx) 
+		{
+			tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado,data) VALUES ("1","'+position.coords.latitude+'","'+position.coords.longitude+'",1,"'+dataTeste+'")');
+		});
+		db.transaction(queryDB,errorCB, successCB);
+		//tx.executeSql("INSERT INTO gps(idUser,lat,long,enviado) VALUES ('"1"','"+position.coords.latitude+"','"+position.coords.longitude+"',1)'", [], successCB, errorCB);		
+    }
+        // Log de erro do Geolocation //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' +
+                  'message: ' + error.message + '\n');
+        }
+		
+		 function populateDB(tx) {
+		//Popular
+		tx.executeSql('DROP TABLE IF EXISTS gps');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS gps (idGps INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, lat float, long float, enviado boolean)'); 	
+    }
+	
+	 function queryDB(tx) {
+	 //debug
+        tx.executeSql('SELECT * FROM gps', [], querySuccess, errorCB);
     }
 
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
+    function querySuccess(tx, results) {
+        var len = results.rows.length;
+		//debug
+		//alert("user table: " + len + " rows found.");
+        for (var i=0; i<len; i++){
+		// alert("Row = " + i + " idUser = " + results.rows.item(i).idUser + " nome =  " + results.rows.item(i).nome+ " login =  " + results.rows.item(i).login+ " pass =  " + results.rows.item(i).password );
+        }
     }
-	 // Transaction error callback
-    //
-    function errorCB(err) {
-        console.log("Error processing SQL: "+err.code);
-    }
-
-    // Transaction success callback
-    //
-	function queryDB(tx){
-		tx.executeSql('CREATE TABLE IF NOT EXISTS gps (idGps INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, lat TEXT not null, long TEXT not null, enviado boolean)');
-		tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado) VALUES (?,?,?,?)', ['1',position.coords.latitude,position.coords.longitude,'1']);
-
-	}
-    function successCB() {
-        var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
-        alert("insertouuuuuuuu");
-    }
-
-
-
     </script>
   </head>
   <body>
-    <p id="geolocation">Watching geolocation...</p>
+    <p id="geolocation">Tututututututs...</p>
   </body>
 </html>
