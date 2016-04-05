@@ -41,8 +41,20 @@
 	
 	 // Após o estado deviceReady na pagina index:
     function startSeed() {
+    	
         var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
         db.transaction(populateDB, errorCB, successCB);
+        
+    }
+
+    function geolocatingAll(logado){
+    	if(logado==true){
+    		var options = { timeout: 30000 };
+    		watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+    	}else{
+    		alert("nao logado");
+    	}
+
     }
 	//Uso o callback pra testar se deu certo 
     function successCB() {
@@ -60,6 +72,12 @@
 	function connectUser(user,passcode){
 		var usuario = user;
 		var password = passcode;
+		if(usuario+"t"=="t"){
+			usuario="InsiraNome"
+		}
+		if(password+"t"=="t"){
+			password="InsiraSenha";
+		}
 		//debug 
 		alert('user '+usuario+" senha "+password);
 		//
@@ -70,14 +88,56 @@
 		});
 		 
 	}
-	
+
+	/*function writeBancoLocal(objeto,x){
+
+	}
+
+	function criaPseudoObjeto(){
+
+	}
+
+	function setPedido(){
+
+	}
+	function atualizaProdutos(){
+
+	}
+	function atualizaUsuarios(){
+
+	}
+	function setLogApp(){
+
+	}
+	function setGpsValues(){
+
+	}
+	function setSupportCall(){
+
+	}
+	function getSupportAnswer(){
+
+	}
+	function setUserState(){
+
+	}*/
+
 	function UserSuccess(tx, results){
 		 var len = results.rows.length;
 		 if(len==0){
-			alert("senha errada, retornar alguma coisa");
+			alert("Usuário ou senha errada!");
+			$.mobile.changePage('#pageIndexMain');
 			//descobrir pq nao funfa o load no div container
 		 }if(len==1){
 			alert("senha correta, logar o user");
+			logado=true;
+			nomeCompleto= results.rows.item(0).nome;
+			usuario = results.rows.item(0).login;
+			idUsuario=results.rows.item(0).idUser;
+			$("#divNomeCompleto").html("<p>Bem vindo "+nomeCompleto+"</p>");
+			$.mobile.changePage('#pageLogado');
+			geolocatingAll(logado);
+
 			//descobrir pq nao funfa o load no div container
 		 }
 			//debug
@@ -85,6 +145,43 @@
 			// alert("Row = " + i + " idUser = " + results.rows.item(i).idUser + " nome =  " + results.rows.item(i).nome+ " login =  " + results.rows.item(i).login+ " pass =  " + results.rows.item(i).password );
         
 		}
+
+		//Callback do geolocation watchID
+    function onSuccess(position) {
+		//Printa na pagina só pra ver que ta rodando
+        /*var element = document.getElementById('geolocation');
+        element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
+                            'Longitude: ' + position.coords.longitude     + '<br />' +
+                            '<hr />'      + element.innerHTML;
+		*/
+		var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+		//alert(position.coords.latitude );
+		//Relembrando formatação de data pra checar qual é compativel com datetime do sqlite
+		var date = new Date();
+		var year = date.getFullYear();
+		var day = date.getDay();
+		var month = date.getMonth();
+		var hour = date.getHours();
+		var min = date.getMinutes();
+		var seconds = date.getSeconds();
+		var dataTeste= year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds;
+		alert("data inteira= "+date+" separada : "+year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds);
+		
+		//'2007-01-01 10:00:00' < formato no banco
+		//Inserta no banco
+	    db.transaction(function(tx) 
+		{
+			tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado,data) VALUES ("'+idUsuario+'","'+position.coords.latitude+'","'+position.coords.longitude+'",1,"'+dataTeste+'")');
+		});
+		//db.transaction(queryDB,errorCB, successCB);
+		//tx.executeSql("INSERT INTO gps(idUser,lat,long,enviado) VALUES ('"1"','"+position.coords.latitude+"','"+position.coords.longitude+"',1)'", [], successCB, errorCB);		
+    }
+
+    // Log de erro do Geolocation //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' +
+                  'message: ' + error.message + '\n');
+        }
 		
 		
 	

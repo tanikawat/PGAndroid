@@ -1,54 +1,121 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html>
 <head>
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css">
+<title>Ponto de Vendas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css" />
 <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/jquery.mobile-1.4.5.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/seed.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script type="text/javascript" charset="utf-8">
     document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady(){
-		alert("funciono");
-		startSeed();
-		$( "#btnActLog" ).click(function() {
-		connectUser($( "#userFilled" ).val(),$( "#passFilled" ).val());
-	});
+		checkConnection();
+		//$( ":mobile-pagecontainer" ).pagecontainer( "load", "login.html", { showLoadMsg: false } );
+		var connectionStatus = false;
+		var logado=false;
+		var usuario="";
+		var nomeCompleto="";
+		var idUsuario=-1;
+  		
+
+	function checkConnection() {
+	    var networkState = navigator.connection.type;
+
+	    var states = {};
+	    states[Connection.UNKNOWN]  = 'Offline';
+	    states[Connection.ETHERNET] = 'Online';
+	    states[Connection.WIFI]     = 'Online';
+	    states[Connection.CELL_2G]  = 'Online';
+	    states[Connection.CELL_3G]  = 'Online';
+	    states[Connection.CELL_4G]  = 'Online';
+	    states[Connection.CELL]     = 'Offline';
+	    states[Connection.NONE]     = 'Offline';
+
+	    alert('Connection type: ' + states[networkState]);
+	    if(states[networkState]=="Online"){
+	    	connectionStatus=true;
+	    	startSeed();
+
+	    }else{
+
+	    	connectionStatus=false;
+	    }
 	}
+
+	(function( $ ){
+   		$.fn.navegar = function() {
+   		// Prevent the usual navigation behavior
+     	 event.preventDefault();
+     	 // Alter the url according to the anchor's href attribute, and
+		// store the data-foo attribute information with the url
+		$.mobile.navigate( $(this).attr( "href" ), {
+			foo: $(this).attr("tulio.html")
+		});
+
+		// Hypothetical content alteration based on the url. E.g, make
+		// an Ajax request for JSON data and render a template into the page.
+		alterContent( $(this).attr("href") );
+    	 
+ 	  }; 
+	})( jQuery );
+
+		
+		
+		$( "#btnActLog" ).click(function() {
+		connectUser($( "#userFilled" ).val(),$( "#passFilled" ).val());	
+
+
+	});
+
+		
+	}
+
 </script>
 </head>
 <body>
-	<div class="outer">
-		<nav class="navbar navbar-inverse">
-			<div class="container-fluid">
-				<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Ponto De Vendas</a> 
-				</div>
-			</div>
-		</nav>	
-			<div  id="container" class="container">
-							<div class="row">
-								<div class="col-sm-6 col-md-4 col-md-offset-4">
-								<h1 class="text-center login-title">Login de usuário</h1>
-									<div class="account-wall">
-										<form class="form-signin">
-											<input id="userFilled" type="text" class="form-control" placeholder="Usuário">
-											<input id="passFilled" type="password" class="form-control" placeholder="Senha">
-											<button id="btnActLog" class="btn btn-lg btn-success btn-block" type="submit">Login</button>
-											<a href="#" class="pull-right need-help">Esqueceu sua Senha? </a><span class="clearfix"></span>
-										</form>
-									</div>
-									<a href="#" class="text-center new-account">Criar um novo usuário</a>
-								</div>
-							</div>
-			</div>
-	</div>  
+
+<!-- Inicio Html : Login page -->
+	 <div data-role="page" id="pageIndexMain" data-prefetch="true" data-theme="h">
+        <div data-role="header">
+            <h1>Home Page</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+        	<div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">Login de usuário</h1>
+            <div class="account-wall">
+                
+                <form class="form-signin">
+                <input id="userFilled" type="text" class="form-control" placeholder="Usuário">
+                <input id="passFilled" type="password" class="form-control" placeholder="Senha">
+                <button id="btnActLog" class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                <a href="#" class="pull-right need-help">Esqueceu sua Senha? </a><span class="clearfix"></span>
+                </form>
+            </div>
+            <a href="#" class="text-center new-account">Criar um novo usuário</a>
+        </div>
+        </div>
+        <div data-role="footer">
+			<h4>Page Footer</h4>
+		</div>
+	</div>
+<!-- Fim Html : Login page -->		
+<!-- Inicio Html : Geolocate page -->
+	 <div data-role="page" id="pageLogado" data-prefetch="true">
+        <div data-role="header">
+            <h1>Logado</h1>
+        </div>
+        <div data-role="main" class="ui-content">
+        	<div id="divNomeCompleto"></div>
+        	<p> Você está online!</p>
+        	<img scr="img/greenball.png">
+        </div>
+        <div data-role="footer">
+			<h4>Page Footer</h4>
+		</div>
+	</div>
+<!-- Fim Html : Login page -->	
 </body>
 </html> 
+
