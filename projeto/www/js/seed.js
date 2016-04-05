@@ -1,187 +1,235 @@
-   // Faz um seed pra popular
-    function populateDB(tx) {
-		//Popula, sempre dropo e create só pra testar mesmo
-		//VERIFICAR COM CLEBER primary Key PROVAVELMENTE NÃO SERA AUTOINCREMENT  (pegar do server..)
-		//VERIFICAR COMO ELE QUER O LAT LONG, VEM COMO FLOAT NO GEOLOCATION
-		//VERIFICAR CAMPO "ENVIADO" ESTÁ EM BOOLEAN, NÃO SERIA MELHOR INT?
-		//VERIFICAR SE É NECESSÁRIO FOREIGN KEY APLICADA NO CREATE (ACHO QUE NAO).
-		tx.executeSql('DROP TABLE IF EXISTS user');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS user (idUser INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT not null, login TEXT not null, password TEXT not null)');
-		tx.executeSql('INSERT INTO user(nome,login,password) VALUES ("Tulio Tanikawa","Tulio","1")');
-		
-		tx.executeSql('DROP TABLE IF EXISTS product');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS product (idProduct INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, tipo TEXT not null, nome TEXT not null, valor int)');
-		tx.executeSql('INSERT INTO product(idUser,tipo,nome,valor) VALUES (1,"Pilula Do Sono","Dormilandia Pill",5000)');
-		
-		tx.executeSql('DROP TABLE IF EXISTS gps');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS gps (idGps INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, lat float, long float, enviado boolean)');
-		tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado) VALUES ("1",-23.000,-46.000,1)');
-		
-		tx.executeSql('DROP TABLE IF EXISTS chat');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS chat (idChat INTEGER PRIMARY KEY AUTOINCREMENT, idUser int,de Text not null, para Text not null, message TEXT, lat float, long float)');
-		tx.executeSql('INSERT INTO chat(idUser,de,para,message,lat,long) VALUES ("1","Tulio Tanikawa","Aecio Roussef da Silva","Quero money",-23.000,-46.000)');
-		
-        tx.executeSql('DROP TABLE IF EXISTS ponto');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS ponto (idPonto INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, situacao TEXT, lat float, long float)');
-		tx.executeSql('INSERT INTO ponto(idUser,situacao,lat,long) VALUES ("1","situacao precaria",-23.000,-46.000)');
-		
-		tx.executeSql('DROP TABLE IF EXISTS log');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS log (idLog INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, message TEXT, data datetime, lat float, long float)');
-		tx.executeSql('INSERT INTO log(idUser,message,lat,long) VALUES ("1","Deu problema pra caramba na Base",-23.000,-46.000)');
-		
-		tx.executeSql('DROP TABLE IF EXISTS support');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS support (idSupport INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, message TEXT NOT NULL,data datetime, lat float, long float, situacao TEXT NOT NULL)');
-		tx.executeSql('INSERT INTO support(idUser,message,lat,long,situacao) VALUES ("1","Suporte, me traga um copo dagua",-23.000,-46.000,"Situacao de ter sede")');
-		
-		tx.executeSql('DROP TABLE IF EXISTS pedido');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS pedido (idPedido INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, idProduto int, quantidade int, situacao TEXT, lat float, long float, data datetime)');
-		tx.executeSql('INSERT INTO pedido(idUser,idProduto,quantidade,situacao,lat,long) VALUES ("1","1","666","Processado",-23.000,-46.000)');
+// Faz um seed pra popular
+function populateDB(tx) {
+  //Popula, sempre dropo e create só pra testar mesmo
+  //VERIFICAR COM CLEBER primary Key PROVAVELMENTE NÃO SERA AUTOINCREMENT  (pegar do server..)
+  //VERIFICAR COMO ELE QUER O LAT LONG, VEM COMO FLOAT NO GEOLOCATION
+  //VERIFICAR CAMPO "ENVIADO" ESTÁ EM BOOLEAN, NÃO SERIA MELHOR INT?
+  //VERIFICAR SE É NECESSÁRIO FOREIGN KEY APLICADA NO CREATE (ACHO QUE NAO).
+  tx.executeSql('DROP TABLE IF EXISTS user');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS user (idUser INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT not null, login TEXT not null, password TEXT not null)');
+  tx.executeSql('INSERT INTO user(nome,login,password) VALUES ("Tulio Tanikawa","Tulio","1")');
+  tx.executeSql('INSERT INTO user(nome,login,password) VALUES ("Donald Trump","Trump","666")');
+
+  tx.executeSql('DROP TABLE IF EXISTS product');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS product (idProduct INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT not null, nome TEXT not null, valor int)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Shampo A",15)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Shampo A",15)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Perfume","Perfume B",136)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Condicionador C",75)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Maquiagem D",81)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Creme de Rosto E",83)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Liquido F",58)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Barra G",41)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Algodão","Algodão H",88)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti Age I",96)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti olheira J",119)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Anti Rugas nos ombros K",122)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti Frieiras L",150)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti calos M",30)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Shampo N",122)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Perfume","Perfume O",98)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Condicionador P",59)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Maquiagem Q",124)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Creme de Rosto R",144)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Liquido S",112)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Barra T",79)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Algodão","Algodão U",82)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti Age V",51)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti olheira X",146)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Anti Rugas nos ombros Y",32)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti Frieiras Z",102)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti calos AA",16)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Shampo BB",47)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Perfume","Perfume CC",86)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Condicionador DD",18)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Maquiagem EE",60)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Creme de Rosto FF",57)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Liquido GG",45)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Barra HH",62)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Algodão","Algodão II",67)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti Age JJ",83)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti olheira KK",21)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Anti Rugas nos ombros LL",57)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti Frieiras MM",123)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti calos NN",81)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Shampo OO",24)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Perfume","Perfume PP",125)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Cabelo","Condicionador RR",39)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Maquiagem SS",95)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Creme de Rosto TT",105)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Liquido UU",85)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Sabonete Barra VV",114)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Algodão","Algodão XX",133)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti Age YY",106)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Rosto","Anti olheira ZZ",24)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Corpo","Anti Rugas nos ombros AAA",49)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti Frieiras BBB",18)');
+  tx.executeSql('INSERT INTO product(tipo,nome,valor) VALUES ("Pes","Anti calos CCC",51)');
+
+
+
+
+  tx.executeSql('DROP TABLE IF EXISTS gps');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS gps (idGps INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, lat float, long float, enviado boolean)');
+  tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado) VALUES ("1",-23.000,-46.000,1)');
+
+  tx.executeSql('DROP TABLE IF EXISTS chat');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS chat (idChat INTEGER PRIMARY KEY AUTOINCREMENT, idUser int,de Text not null, para Text not null, message TEXT, lat float, long float)');
+  tx.executeSql('INSERT INTO chat(idUser,de,para,message,lat,long) VALUES ("1","Tulio Tanikawa","Aecio Roussef da Silva","Quero money",-23.000,-46.000)');
+
+  tx.executeSql('DROP TABLE IF EXISTS ponto');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS ponto (idPonto INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, data datetime, situacao TEXT, lat float, long float)');
+  tx.executeSql('INSERT INTO ponto(idUser,situacao,lat,long) VALUES ("1","situacao precaria",-23.000,-46.000)');
+
+  tx.executeSql('DROP TABLE IF EXISTS log');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS log (idLog INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, message TEXT, data datetime, lat float, long float)');
+  tx.executeSql('INSERT INTO log(idUser,message,lat,long) VALUES ("1","Deu problema pra caramba na Base",-23.000,-46.000)');
+
+  tx.executeSql('DROP TABLE IF EXISTS support');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS support (idSupport INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, message TEXT NOT NULL,data datetime, lat float, long float, situacao TEXT NOT NULL)');
+  tx.executeSql('INSERT INTO support(idUser,message,lat,long,situacao) VALUES ("1","Suporte, me traga um copo dagua",-23.000,-46.000,"Situacao de ter sede")');
+
+  tx.executeSql('DROP TABLE IF EXISTS pedido');
+  tx.executeSql('CREATE TABLE IF NOT EXISTS pedido (idPedido INTEGER PRIMARY KEY AUTOINCREMENT, idUser int, idProduto int, quantidade int, situacao TEXT, lat float, long float, data datetime)');
+  tx.executeSql('INSERT INTO pedido(idUser,idProduto,quantidade,situacao,lat,long) VALUES ("1","1","666","Processado",-23.000,-46.000)');
+}
+
+
+// Após o estado deviceReady na pagina index:
+function startSeed() {
+
+  var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+  db.transaction(populateDB, errorCB, successCB);
+
+}
+
+function geolocatingAll(logado){
+  if(logado==true){
+    var options = { timeout: 30000 };
+    watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+  }else{
+    alert("nao logado");
+  }
+
+}
+//Uso o callback pra testar se deu certo
+function successCB() {
+  //debug
+  //alert("banco populado");
+  //
+}
+
+//Callback de erros
+function errorCB(err) {
+  alert("Error processing SQL: "+err.code);
+}
+
+//Teste de conectar usuário
+function connectUser(user,passcode){
+  var usuario = user;
+  var password = passcode;
+  if(usuario+"t"=="t"){
+    usuario="InsiraNome"
+  }
+  if(password+"t"=="t"){
+    password="InsiraSenha";
+  }
+  //debug
+  //alert('user '+usuario+" senha "+password);
+  //
+  var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+  db.transaction(function(tx)
+  {
+    tx.executeSql("SELECT * FROM user where login='"+usuario+"' and password='"+password+"' ", [], UserSuccess, errorCB)
+  });
+
+}
+function getProduct(){
+  var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+  db.transaction(function(tx)
+  {
+    tx.executeSql("SELECT * FROM product order by tipo", [], localProductResult, errorCB)
+  });
+  //alert("inside getProduct");
+
+}
+
+function localProductResult(tx,results){
+
+  var len = results.rows.length;
+
+  var coluna='<table data-role="table" data-mode="columntoggle" id="movie-table" data-filter="true" data-input="#filterTable-input" class="ui-responsive table-stroke" data-column-btn-theme="b" data-column-btn-text="Colunas" data-column-popup-theme="a">';
+  coluna+="<thead><tr><th>Tipo</th><th>Nome</th><th>Valor</th><th>Add</th><th>Qtd</th></tr></thead><tbody>";
+  for(var i=0 ; i<len ; i++){
+    coluna+="<tr>";
+    coluna+='<td>'+ results.rows.item(i).tipo+'</td>';
+    coluna+='<td>'+ results.rows.item(i).nome+'</td>';
+    coluna+='<td> R$ '+ results.rows.item(i).valor+'</td>';
+    coluna+='<td> + -</td>';
+    coluna+='<td>12</td>';
+    coluna+="</tr>"
+  }
+  coluna+="</tbody></table>"
+  $("#divTabelaResultado").html(coluna);
+  $.mobile.changePage("#pageProduto");
+}
+
+function UserSuccess(tx, results){
+  var len = results.rows.length;
+  if(len==0){
+    alert("Usuário ou senha errada!");
+    $.mobile.changePage('#pageIndexMain');
+
+  }if(len==1){
+    //alert("senha correta, logar o user");
+    logado=true;
+    nomeCompleto= results.rows.item(0).nome;
+    usuario = results.rows.item(0).login;
+    idUsuario=results.rows.item(0).idUser;
+    $("#divNomeCompleto").html("<h3>Bem vindo "+nomeCompleto+"! Você está online</h3>");
+    $.mobile.changePage('#pageLogado');
+    geolocatingAll(logado);
+  }
+}
+
+//Callback do geolocation watchID
+function onSuccess(position) {
+
+  var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
+  //alert(position.coords.latitude );
+  //Relembrando formatação de data pra checar qual é compativel com datetime do sqlite
+  var date = new Date();
+  var year = date.getFullYear();
+  var day = date.getDay();
+  var month = date.getMonth();
+  var min = ('0'+date.getMinutes()).substr(-2);
+  var seconds = ('0'+date.getSeconds()).substr(-2);
+  var hour = ('0'+date.getHours()).substr(-2);
+  var dataTeste= year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds;
+  //alert("data inteira= "+date+" separada : "+year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds);
+
+  //'2007-01-01 10:00:00' < formato no banco
+  //Inserta no banco
+  db.transaction(function(tx)
+  {
+    tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado,data) VALUES ("'+idUsuario+'","'+position.coords.latitude+'","'+position.coords.longitude+'",1,"'+dataTeste+'")');
+  });
+
+  $.ajax({
+    type: 'POST',
+    url: "http://app.businessmap.com.br/coordenadas/new/",
+    data: {'user_id':idUsuario,'lat':position.coords.latitude,'lng':position.coords.longitude,'data':dataTeste},
+    success: function(responseData, textStatus, jqXHR) {
+      //$("#pageLogado").html(responseData+" horario"+dataTeste);
+    },
+    error: function (responseData, textStatus, errorThrown) {
+      //alert('POST failed.' + responseData + ", " + textStatus + ", " + errorThrown);
     }
-	
-	
-	 // Após o estado deviceReady na pagina index:
-    function startSeed() {
-    	
-        var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
-        db.transaction(populateDB, errorCB, successCB);
-        
-    }
+  });
+}
 
-    function geolocatingAll(logado){
-    	if(logado==true){
-    		var options = { timeout: 30000 };
-    		watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
-    	}else{
-    		alert("nao logado");
-    	}
-
-    }
-	//Uso o callback pra testar se deu certo 
-    function successCB() {
-		//debug
-        alert("banco populado");
-		//
-    }
-	
-    //Callback de erros
-    function errorCB(err) {
-        alert("Error processing SQL: "+err.code);
-    }
-
-    //Teste de conectar usuário 
-	function connectUser(user,passcode){
-		var usuario = user;
-		var password = passcode;
-		if(usuario+"t"=="t"){
-			usuario="InsiraNome"
-		}
-		if(password+"t"=="t"){
-			password="InsiraSenha";
-		}
-		//debug 
-		alert('user '+usuario+" senha "+password);
-		//
-		var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
-		 db.transaction(function(tx) 
-		{
-			tx.executeSql("SELECT * FROM user where login='"+usuario+"' and password='"+password+"' ", [], UserSuccess, errorCB)
-		});
-		 
-	}
-
-	/*function writeBancoLocal(objeto,x){
-
-	}
-
-	function criaPseudoObjeto(){
-
-	}
-
-	function setPedido(){
-
-	}
-	function atualizaProdutos(){
-
-	}
-	function atualizaUsuarios(){
-
-	}
-	function setLogApp(){
-
-	}
-	function setGpsValues(){
-
-	}
-	function setSupportCall(){
-
-	}
-	function getSupportAnswer(){
-
-	}
-	function setUserState(){
-
-	}*/
-
-	function UserSuccess(tx, results){
-		 var len = results.rows.length;
-		 if(len==0){
-			alert("Usuário ou senha errada!");
-			$.mobile.changePage('#pageIndexMain');
-			//descobrir pq nao funfa o load no div container
-		 }if(len==1){
-			alert("senha correta, logar o user");
-			logado=true;
-			nomeCompleto= results.rows.item(0).nome;
-			usuario = results.rows.item(0).login;
-			idUsuario=results.rows.item(0).idUser;
-			$("#divNomeCompleto").html("<p>Bem vindo "+nomeCompleto+"</p>");
-			$.mobile.changePage('#pageLogado');
-			geolocatingAll(logado);
-
-			//descobrir pq nao funfa o load no div container
-		 }
-			//debug
-			//for (var i=0; i<len; i++){
-			// alert("Row = " + i + " idUser = " + results.rows.item(i).idUser + " nome =  " + results.rows.item(i).nome+ " login =  " + results.rows.item(i).login+ " pass =  " + results.rows.item(i).password );
-        
-		}
-
-		//Callback do geolocation watchID
-    function onSuccess(position) {
-		//Printa na pagina só pra ver que ta rodando
-        /*var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
-                            'Longitude: ' + position.coords.longitude     + '<br />' +
-                            '<hr />'      + element.innerHTML;
-		*/
-		var db = window.openDatabase("dbPDV", "1.0", "PDV Demo", 200000);
-		//alert(position.coords.latitude );
-		//Relembrando formatação de data pra checar qual é compativel com datetime do sqlite
-		var date = new Date();
-		var year = date.getFullYear();
-		var day = date.getDay();
-		var month = date.getMonth();
-		var hour = date.getHours();
-		var min = date.getMinutes();
-		var seconds = date.getSeconds();
-		var dataTeste= year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds;
-		alert("data inteira= "+date+" separada : "+year+"-"+month+"-"+day+" "+hour+":"+min+":"+seconds);
-		
-		//'2007-01-01 10:00:00' < formato no banco
-		//Inserta no banco
-	    db.transaction(function(tx) 
-		{
-			tx.executeSql('INSERT INTO gps(idUser,lat,long,enviado,data) VALUES ("'+idUsuario+'","'+position.coords.latitude+'","'+position.coords.longitude+'",1,"'+dataTeste+'")');
-		});
-		//db.transaction(queryDB,errorCB, successCB);
-		//tx.executeSql("INSERT INTO gps(idUser,lat,long,enviado) VALUES ('"1"','"+position.coords.latitude+"','"+position.coords.longitude+"',1)'", [], successCB, errorCB);		
-    }
-
-    // Log de erro do Geolocation //
-        function onError(error) {
-            alert('code: '    + error.code    + '\n' +
-                  'message: ' + error.message + '\n');
-        }
-		
-		
-	
+// Log de erro do Geolocation //
+function onError(error) {
+  alert('code: '    + error.code    + '\n' +
+  'message: ' + error.message + '\n');
+}
