@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+  <title>Ponto de Vendas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/PdVBeta.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/jquery.mobile.icons.min.css" />
+  <style>.custom-centering {
+    /*Se ficar bom adicionar a um custom.css*/
+    position: absolute;
+    top: 30%;
+    left: 30%;
+  }
+  .ui-page { -webkit-backface-visibility: hidden; }
+
+  </style>
+  <link rel="stylesheet" type="text/css" href="css/jquery.mobile.structure-1.4.5.min.css" />
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/jquery.mobile-1.4.5.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/jquery.md5.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/seed.js"></script>
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script type="text/javascript" charset="utf-8">
+  document.addEventListener("deviceready", onDeviceReady, false);
+  var logado="";
+  var usuario="";
+  function onDeviceReady(){
+
+    //$( ":mobile-pagecontainer" ).pagecontainer( "load", "login.html", { showLoadMsg: false } );
+    var connectionStatus = false;
+    var nomeCompleto="";
+    var idUsuario=-1;
+    //Dizem ser importante para poder fazer post crossdomain
+    $.support.cors = true;
+    $.mobile.allowCrossDomainPages = true;
+    if(logado==""){checkConnection();}
+    if(usuario!=""){$.mobile.changePage("#pageLogado");}
+    function checkConnection() {
+      var networkState = navigator.connection.type;
+      var states = {};
+      states[Connection.UNKNOWN]  = 'Offline';
+      states[Connection.ETHERNET] = 'Online';
+      states[Connection.WIFI]     = 'Online';
+      states[Connection.CELL_2G]  = 'Online';
+      states[Connection.CELL_3G]  = 'Online';
+      states[Connection.CELL_4G]  = 'Online';
+      states[Connection.CELL]     = 'Offline';
+      states[Connection.NONE]     = 'Offline';
+      //alert('Connection type: ' + states[networkState]);
+      if(states[networkState]=="Online"){
+        connectionStatus=true;
+        startUpdate();
+        //startSeed();//temporario até termos db no server
+      }else{
+        connectionStatus=false;
+        //aqui sim connectionStatus será False, e buscara no local db
+      }
+    }
+    $( "#btnActLog" ).click(function() {
+      connectUser($( "#userFilled" ).val(),$( "#passFilled" ).val());
+    });
+
+    $( "#btnGetProduct" ).click(function() {
+      getProduct();
+    });
+      $( "#btnRegistrarVenda" ).click(function() {
+    setPedido();
+      });
+      $( "#btnPageChat" ).click(function() {
+        getChatUpdates();
+      });
+  }//onDeviceReadyFim
+  </script>
+</head>
+<body>
+  <!-- Inicio Html : Login page -->
+  <div data-role="page" id="pageIndexMain" data-prefetch="true" data-transition="slide">
+    <div data-role="header">
+      <img id="my_image" src="img/Soflex.png" height="36" width="60" class="ui-btn-left"/><h1>Ponto de Vendas - Soflex</h1>
+    </div>
+    <div data-role="main" class="ui-content" data-transition="slide">
+      <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <h3>Login (email)</h3>
+        <div class="account-wall">
+          <form class="form-signin">
+            <input id="userFilled" type="email" class="form-control" placeholder="Usuário">
+            <h3>Senha</h3>
+
+            <input id="passFilled" type="password" class="form-control" placeholder="Senha">
+            <button id="btnActLog" class="btn btn-lg btn-primary btn-block" type="submit"  data-transition="slide">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <h4>Page Footer</h4>
+    </div>
+  </div>
+  <!-- Fim Html : Login page -->
+  <!-- Inicio Html : Geolocate page -->
+  <div data-role="page" id="pageLogado" data-prefetch="true" data-transition="slide">
+    <div data-role="header">
+      <h1>Manager Soflex</h1>
+    </div>
+    <div data-role="navbar" class="ui-navbar" role="navigation">
+      <ul class="ui-grid-b">
+        <li class="ui-block-a"><a href="#" class="ui-btn-active ui-link ui-btn">Descanso</a></li>
+        <li class="ui-block-b" id="btnGetProduct"><a href="#" class="ui-link ui-btn"  data-transition="slide">Pedidos</a></li>
+        <li class="ui-block-c" id="btnPageChat"><a href="#" class="ui-link ui-btn"  data-transition="slide">Chat</a></li>
+        <li class="ui-block-c"><a href="#" class="ui-link ui-btn">Reportar Erro</a></li>
+      </ul>
+    </div>
+    <div data-role="main" class="ui-content" data-transition="slide">
+      <div id="divNomeCompleto"></div>
+      <img id="my_image" class=" custom-centering"src="img/greenball.png" height="120" width="120"=/>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <h4>Page Footer</h4>
+    </div>
+  </div>
+  <!-- Fim Html : Login page -->
+  <!-- Inicio Html : ListProducts page -->
+  <div data-role="page" id="pageProduto" data-prefetch="true" data-transition="slide">
+    <div data-role="header">
+      <h1>Produtos</h1>
+    </div>
+    <div data-role="main" class="ui-content" data-transition="slide">
+      <form>
+        <input id="filterTable-input" data-type="search" />
+      </form>
+      <div id="divTabelaResultado"></div>
+    </div>
+    <button id="btnRegistrarVenda" class="btn btn-lg btn-primary btn-block"  type="submit">Registrar a venda</button>
+    <div data-role="footer" data-position="fixed">
+      <h4>Page Footer</h4>
+    </div>
+  </div>
+  <!-- Fim Html : ListProducts page -->
+  <!-- Inicio Html : pageChat page -->
+  <div data-role="page" id="pageChat" data-prefetch="true" data-transition="slide">
+    <div data-role="header">
+      <h1>Produtos</h1>
+    </div>
+    <div data-role="main" class="ui-content" data-transition="slide">
+      <form>
+     <label for="text-4">Text input:</label>
+      <label for="textarea-4">Mensagem:</label>
+      <div id="incomingMessages" name="incomingMessages" class="msgContainerDiv"></div>
+      <textarea data-mini="true" cols="40" rows="8" name="textarea-4" id="mensagemUsuario"></textarea>
+    </form>
+    </div>
+    <button id="btnEnviaMensagem" class="btn btn-lg btn-primary btn-block"  type="submit">Enviar Mensagem</button>
+    <div data-role="footer" data-position="fixed">
+      <h4>Page Footer</h4>
+    </div>
+  </div>
+  <!-- Fim Html : pageChat page -->
+</body>
+</html>
